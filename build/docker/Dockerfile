@@ -1,0 +1,5 @@
+FROM openjdk:latest
+MAINTAINER Simon Safonov
+ADD YAML_to_XML-1.0-SNAPSHOT.tar /
+ENTRYPOINT ["/YAML_to_XML-1.0-SNAPSHOT/bin/YAML_to_XML"]
+EXPOSE 8080

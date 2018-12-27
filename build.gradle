@@ -1,0 +1,57 @@
+group 'ConverterService'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: DockerRemoteApiPlugin
+apply plugin: DockerJavaApplicationPlugin
+
+import com.bmuschko.gradle.docker.DockerJavaApplicationPlugin
+import com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+import com.bmuschko.gradle.docker.tasks.container.*
+
+sourceCompatibility = 1.10
+mainClassName = 'ru.test.Service'
+
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-docker-plugin:3.0.7'
+    }
+}
+
+docker {
+    javaApplication {
+        maintainer = 'Maria Mikhaleva'
+        ports = [8080]
+        tag = 'converter-yaml-xml'
+    }
+}
+
+task dockerCont(type: DockerCreateContainer) {
+    dependsOn dockerBuildImage
+    targetImageId { dockerBuildImage.imageId}
+    portBindings = ['8080:8080']
+}
+
+task start(type: DockerStartContainer) {
+    dependsOn dockerCont
+    targetContainerId { dockerCont.containerId }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'org.glassfish.grizzly', name: 'grizzly-http-server', version: '2.4.0'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'org.json', name: 'json', version: '20180130'
+    compile group: 'com.fasterxml.jackson.dataformat', name:'jackson-dataformat-yaml', version: '2.7.4'
+    compile group: 'com.fasterxml.jackson.core', name:'jackson-databind', version: '2.7.4'
+}
