@@ -23,6 +23,7 @@ buildscript {
     }
 }
 
+
 docker {
     javaApplication {
         maintainer = 'Maria Mikhaleva'
