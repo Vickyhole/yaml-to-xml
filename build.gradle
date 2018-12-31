@@ -26,6 +26,7 @@ buildscript {
 docker {
     javaApplication {
         maintainer = 'Maria Mikhaleva'
+        baseImage = 'openjdk:latest'
         ports = [8080]
         tag = 'converter-yaml-xml'
     }
